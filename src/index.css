@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-paper text-ink antialiased overflow-x-hidden font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif leading-[0.9] tracking-tighter;
+  }
+}
+
+@layer components {
+  .editorial-divider {
+    @apply border-t border-ink w-full my-8;
+  }
+
+  .stark-input {
+    @apply w-full bg-transparent border-2 border-ink px-6 py-4 text-ink outline-none placeholder:text-ink/30 font-sans font-bold uppercase tracking-widest text-sm transition-all focus:ring-0;
+  }
+
+  .stamp-button {
+    @apply px-8 py-4 bg-ink text-paper font-sans font-extrabold uppercase tracking-[0.2em] text-xs transition-all hover:bg-lb-orange hover:text-ink;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .poster-grid-pop {
+    @apply grayscale transition-all duration-500 hover:grayscale-0;
+  }
+}
