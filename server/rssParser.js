@@ -8,36 +8,26 @@ export async function parseRSS(rssUrl) {
       throw new Error('Invalid RSS URL provided')
     }
 
-    // Protocol Hardening: Force https if missing
-    let finalUrl = rssUrl.trim();
-    if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
-      finalUrl = 'https://' + finalUrl;
-    }
+    // Ensure URL is properly encoded
+    const url = new URL(rssUrl)
+    const encodedUrl = url.toString()
 
-    console.log('Fetching RSS from URL:', finalUrl)
+    console.log('Fetching RSS from encoded URL:', encodedUrl)
 
     // Fetch RSS feed
-    const response = await axios.get(finalUrl, {
+    const response = await axios.get(encodedUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
       },
-      timeout: 8000, // 8 second timeout buffer for Vercel
+      timeout: 8000, // 8 second timeout
       validateStatus: function (status) {
         return status >= 200 && status < 300
       },
     })
 
-    console.log('AXIOS_STATUS:', response.status);
-    console.log('HEADERS:', response.headers);
-    console.log('TYPE_OF_DATA:', typeof response.data);
-
-    if (typeof response.data === 'string') {
-      console.log(`Response preview (500 chars):\n${response.data.substring(0, 500)}`);
-    } else {
-      console.log('Response preview: data is not a string');
-    }
-
-    console.log('RSS feed fetched, length:', response.data?.length)
+    console.log('RSS feed fetched, length:', response.data.length)
 
     // Parse XML with proper namespace handling
     const parser = new xml2js.Parser({
@@ -45,7 +35,7 @@ export async function parseRSS(rssUrl) {
       mergeAttrs: true,
       explicitCharkey: false,
       ignoreAttrs: false,
-      xmlns: false,
+      xmlns: true,
       tagNameProcessors: [xml2js.processors.stripPrefix],
     })
 
@@ -100,11 +90,11 @@ export async function parseRSS(rssUrl) {
         // Handle different XML structures (string, object with _ property, etc.)
         const extractValue = (val) => {
           if (!val) return null
-          if (Array.isArray(val)) return val.length > 0 ? extractValue(val[0]) : null
           if (typeof val === 'string') return val.trim()
           if (typeof val === 'object') {
             // Try various ways to extract text from XML objects
             return val._ || val.$?.text || val.text || val['#text'] || val['$text'] ||
+              (Array.isArray(val) && val[0] ? extractValue(val[0]) : null) ||
               (Object.keys(val).length === 1 ? Object.values(val)[0] : null)
           }
           return String(val).trim()

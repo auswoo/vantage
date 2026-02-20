@@ -43,12 +43,32 @@ app.post('/api/parse-rss', async (req, res) => {
     // Clean and validate the input
     rssUrl = rssUrl.trim()
 
-    // If it's just a username (no http/https), construct the RSS URL
-    if (!rssUrl.startsWith('http://') && !rssUrl.startsWith('https://')) {
-      // Remove any leading/trailing slashes and spaces
+    // Robust URL construction
+    if (rssUrl.includes('letterboxd.com') && rssUrl.endsWith('/rss/')) {
+      // It's already a valid RSS URL, just ensure https
+      if (!rssUrl.startsWith('http')) {
+        rssUrl = 'https://' + rssUrl;
+      }
+    } else if (rssUrl.includes('letterboxd.com')) {
+      // It's a profile URL, extract the username
+      let urlToParse = rssUrl.startsWith('http') ? rssUrl : 'https://' + rssUrl;
+      try {
+        const urlObj = new URL(urlToParse);
+        const pathParts = urlObj.pathname.split('/').filter(Boolean);
+        if (pathParts.length > 0) {
+          const username = pathParts[0];
+          rssUrl = `https://letterboxd.com/${username}/rss/`;
+        } else {
+          return res.status(400).json({ error: 'Could not find username in URL' })
+        }
+      } catch (e) {
+        return res.status(400).json({ error: 'Invalid Letterboxd URL format' })
+      }
+    } else {
+      // It's just a plain username
       const username = rssUrl.replace(/^\/+|\/+$/g, '').trim()
       if (!username) {
-        return res.status(400).json({ error: 'Invalid username or URL' })
+        return res.status(400).json({ error: 'Invalid username' })
       }
       rssUrl = `https://letterboxd.com/${encodeURIComponent(username)}/rss/`
     }
@@ -100,6 +120,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' })
 })
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
-})
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`)
+  })
+}
+
+export default app;
