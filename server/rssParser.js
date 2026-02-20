@@ -8,14 +8,16 @@ export async function parseRSS(rssUrl) {
       throw new Error('Invalid RSS URL provided')
     }
 
-    // Ensure URL is properly encoded
-    const url = new URL(rssUrl)
-    const encodedUrl = url.toString()
+    // Protocol Hardening: Force https if missing
+    let finalUrl = rssUrl.trim();
+    if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+      finalUrl = 'https://' + finalUrl;
+    }
 
-    console.log('Fetching RSS from encoded URL:', encodedUrl)
+    console.log('Fetching RSS from URL:', finalUrl)
 
     // Fetch RSS feed
-    const response = await axios.get(encodedUrl, {
+    const response = await axios.get(finalUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       },
@@ -25,9 +27,17 @@ export async function parseRSS(rssUrl) {
       },
     })
 
-    console.log(`RSS feed fetched, status: ${response.status}`);
-    console.log(`Response preview: ${response.data.substring(0, 100)}...`);
-    console.log('RSS feed fetched, length:', response.data.length)
+    console.log('AXIOS_STATUS:', response.status);
+    console.log('HEADERS:', response.headers);
+    console.log('TYPE_OF_DATA:', typeof response.data);
+
+    if (typeof response.data === 'string') {
+      console.log(`Response preview (500 chars):\n${response.data.substring(0, 500)}`);
+    } else {
+      console.log('Response preview: data is not a string');
+    }
+
+    console.log('RSS feed fetched, length:', response.data?.length)
 
     // Parse XML with proper namespace handling
     const parser = new xml2js.Parser({
