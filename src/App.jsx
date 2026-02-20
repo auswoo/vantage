@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import LandingPage from './components/LandingPage'
 import Dashboard from './components/Dashboard'
 import LoadingOverlay from './components/LoadingOverlay'
+import FilmSlate from './components/FilmSlate'
 
 function App() {
   const [rssUrl, setRssUrl] = useState(null)
   const [movieData, setMovieData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [slateCompleted, setSlateCompleted] = useState(false)
 
   const handleRssSubmit = async (url) => {
     setLoading(true)
@@ -56,33 +58,44 @@ function App() {
 
   return (
     <>
-      <AnimatePresence>
-        {loading && <LoadingOverlay message="Analyzing your watch history..." />}
-      </AnimatePresence>
+      {!slateCompleted && <FilmSlate onComplete={() => setSlateCompleted(true)} />}
 
-      {error && (
-        <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-[60] bg-ink text-paper p-6 max-w-lg shadow-2xl">
-          <div className="flex items-start gap-4">
-            <span className="text-xl">⚠️</span>
-            <div className="flex-1">
-              <p className="font-sans font-black uppercase text-[10px] tracking-widest mb-1 opacity-50">Archive Protocol Error</p>
-              <p className="font-serif italic text-lg leading-tight">{error}</p>
-              <button
-                onClick={() => setError(null)}
-                className="mt-4 font-sans font-black uppercase tracking-widest text-[10px] border-b border-paper hover:border-lb-orange hover:text-lb-orange transition-all"
-              >
-                Dismiss Warning
-              </button>
+      <motion.div
+        animate={{
+          scale: slateCompleted ? 1 : 0.95,
+          opacity: slateCompleted ? 1 : 0
+        }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+        className="min-h-screen"
+      >
+        <AnimatePresence>
+          {loading && <LoadingOverlay message="Analyzing your watch history..." />}
+        </AnimatePresence>
+
+        {error && (
+          <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-[60] bg-ink text-paper p-6 max-w-lg shadow-2xl">
+            <div className="flex items-start gap-4">
+              <span className="text-xl">⚠️</span>
+              <div className="flex-1">
+                <p className="font-sans font-black uppercase text-[10px] tracking-widest mb-1 opacity-50">Archive Protocol Error</p>
+                <p className="font-serif italic text-lg leading-tight">{error}</p>
+                <button
+                  onClick={() => setError(null)}
+                  className="mt-4 font-sans font-black uppercase tracking-widest text-[10px] border-b border-paper hover:border-lb-orange hover:text-lb-orange transition-all"
+                >
+                  Dismiss Warning
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {!rssUrl || !movieData ? (
-        <LandingPage onSubmit={handleRssSubmit} loading={loading} />
-      ) : (
-        <Dashboard data={movieData} onReset={handleReset} />
-      )}
+        {!rssUrl || !movieData ? (
+          <LandingPage onSubmit={handleRssSubmit} loading={loading} />
+        ) : (
+          <Dashboard data={movieData} onReset={handleReset} />
+        )}
+      </motion.div>
     </>
   )
 }
