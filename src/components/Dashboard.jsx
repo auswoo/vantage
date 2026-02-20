@@ -7,6 +7,7 @@ import CountryChart from './dashboard/CountryChart'
 import MonthlyActivity from './dashboard/MonthlyActivity'
 import KeywordInsights from './dashboard/KeywordInsights'
 import BrutalStats from './dashboard/BrutalStats'
+import DataScanner from './DataScanner'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -50,8 +51,9 @@ const Dashboard = ({ data, onReset }) => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full border-b-2 border-ink pb-8 mb-16 flex flex-col md:flex-row justify-between items-baseline gap-8"
+          className="w-full border-b-2 border-ink pb-8 mb-16 flex flex-col md:flex-row justify-between items-baseline gap-8 relative overflow-hidden"
         >
+          <DataScanner />
           <div className="space-y-2">
             <h1 className="text-7xl lg:text-9xl font-serif font-black tracking-[calc(-0.04em)] leading-[0.8] mb-4">
               Metadata <span className="italic font-normal">Synthesis.</span>
@@ -91,7 +93,10 @@ const Dashboard = ({ data, onReset }) => {
             <BrutalStats data={data} />
           </motion.div>
 
-          <div className="col-span-12 editorial-divider !my-4" />
+          <div className="col-span-12 relative overflow-hidden my-4">
+            <div className="editorial-divider !my-0" />
+            <DataScanner />
+          </div>
 
           {/* Monthly Activity */}
           <motion.div variants={itemVariants} className="col-span-12 md:col-span-6 lg:col-span-4">
@@ -108,7 +113,10 @@ const Dashboard = ({ data, onReset }) => {
             <KeywordInsights data={data} />
           </motion.div>
 
-          <div className="col-span-12 editorial-divider !my-4" />
+          <div className="col-span-12 relative overflow-hidden my-4">
+            <div className="editorial-divider !my-0" />
+            <DataScanner />
+          </div>
 
           {/* Time Capsule */}
           <motion.div variants={itemVariants} className="col-span-12 md:col-span-6 lg:col-span-5 border-r border-ink/10 pr-8">

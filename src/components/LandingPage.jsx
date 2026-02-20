@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import DataScanner from './DataScanner'
 
 const LandingPage = ({ onSubmit, loading }) => {
   const [url, setUrl] = useState('')
@@ -16,8 +17,9 @@ const LandingPage = ({ onSubmit, loading }) => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="w-full flex justify-between items-baseline mb-32 border-b border-ink pb-4"
+        className="w-full flex justify-between items-baseline mb-32 border-b border-ink pb-4 relative overflow-hidden"
       >
+        <DataScanner />
         <span className="font-sans font-black uppercase tracking-[0.4em] text-[10px]">CINEMATIC_INDEX</span>
         <span className="font-sans font-bold uppercase tracking-widest text-[10px]">BATCH_SIZE: 50</span>
       </motion.div>
@@ -37,7 +39,10 @@ const LandingPage = ({ onSubmit, loading }) => {
             The Data.
           </h1>
 
-          <div className="editorial-divider mt-12 mb-12" />
+          <div className="relative overflow-hidden w-full mt-12 mb-12">
+            <div className="editorial-divider !mt-0 !mb-0" />
+            <DataScanner />
+          </div>
 
           <div className="flex flex-col lg:flex-row gap-12 lg:items-start">
             <p className="flex-1 font-sans text-xl lg:text-2xl font-bold tracking-tight leading-snug">
