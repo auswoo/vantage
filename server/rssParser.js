@@ -17,14 +17,16 @@ export async function parseRSS(rssUrl) {
     // Fetch RSS feed
     const response = await axios.get(encodedUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; Vantage/1.2)',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       },
-      timeout: 10000, // 10 second timeout
+      timeout: 8000, // 8 second timeout buffer for Vercel
       validateStatus: function (status) {
         return status >= 200 && status < 300
       },
     })
 
+    console.log(`RSS feed fetched, status: ${response.status}`);
+    console.log(`Response preview: ${response.data.substring(0, 100)}...`);
     console.log('RSS feed fetched, length:', response.data.length)
 
     // Parse XML with proper namespace handling
@@ -33,7 +35,7 @@ export async function parseRSS(rssUrl) {
       mergeAttrs: true,
       explicitCharkey: false,
       ignoreAttrs: false,
-      xmlns: true,
+      xmlns: false,
       tagNameProcessors: [xml2js.processors.stripPrefix],
     })
 
@@ -88,11 +90,11 @@ export async function parseRSS(rssUrl) {
         // Handle different XML structures (string, object with _ property, etc.)
         const extractValue = (val) => {
           if (!val) return null
+          if (Array.isArray(val)) return val.length > 0 ? extractValue(val[0]) : null
           if (typeof val === 'string') return val.trim()
           if (typeof val === 'object') {
             // Try various ways to extract text from XML objects
             return val._ || val.$?.text || val.text || val['#text'] || val['$text'] ||
-              (Array.isArray(val) && val[0] ? extractValue(val[0]) : null) ||
               (Object.keys(val).length === 1 ? Object.values(val)[0] : null)
           }
           return String(val).trim()
