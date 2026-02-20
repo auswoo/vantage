@@ -1,6 +1,18 @@
 import { motion } from 'framer-motion'
+import { useEffect } from 'react'
 
 const LoadingOverlay = ({ message = 'Synthesizing...' }) => {
+  useEffect(() => {
+    // Lock scroll
+    const originalStyle = window.getComputedStyle(document.body).overflow
+    document.body.style.overflow = 'hidden'
+
+    // Cleanup - restore scroll
+    return () => {
+      document.body.style.overflow = originalStyle
+    }
+  }, [])
+
   return (
     <motion.div
       className="fixed inset-0 bg-paper z-[100] flex flex-col items-center justify-center p-12"
