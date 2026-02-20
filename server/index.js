@@ -13,18 +13,7 @@ const __dirname = dirname(__filename)
 
 // Load .env file from the project root
 const envPath = join(__dirname, '..', '.env')
-console.log('📁 Looking for .env at:', envPath)
-console.log('📄 File exists:', existsSync(envPath))
-
 const result = dotenv.config({ path: envPath })
-
-if (result.error) {
-  console.error('❌ Error loading .env file:', result.error)
-} else {
-  console.log('✅ .env file loaded successfully')
-}
-
-console.log('🔑 TMDB API Key loaded:', process.env.TMDB_API_KEY ? `Yes (${process.env.TMDB_API_KEY.substring(0, 8)}...)` : 'No')
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -95,16 +84,8 @@ app.post('/api/parse-rss', async (req, res) => {
     }
 
     // Enrich with TMDB data
-    console.log('Enriching with TMDB data...')
+    // Enrich with TMDB data
     const enrichedData = await enrichWithTMDB(rssData)
-
-    console.log(`Enrichment complete. ${enrichedData.movies.length} movies processed.`)
-
-    if (enrichedData.movies.length > 0) {
-      const sample = enrichedData.movies[0]
-      console.log('Sample enriched movie keys:', Object.keys(sample))
-      console.log('Sample analytics - Countries:', sample.countries, 'Keywords:', sample.keywords?.slice(0, 3), 'WatchDate:', sample.watchedDate)
-    }
 
     res.json(enrichedData)
   } catch (error) {

@@ -27,8 +27,6 @@ export async function parseRSS(rssUrl) {
       },
     })
 
-    console.log('RSS feed fetched, length:', response.data.length)
-
     // Parse XML with proper namespace handling
     const parser = new xml2js.Parser({
       explicitArray: false,
@@ -41,16 +39,11 @@ export async function parseRSS(rssUrl) {
 
     const result = await parser.parseStringPromise(response.data)
 
-    console.log('RSS parsed. Channel:', result.rss?.channel?.title)
-    console.log('Sample item structure:', JSON.stringify(result.rss?.channel?.item?.[0] || result.rss?.channel?.item, null, 2))
-
     // Extract items from RSS feed - handle different XML structures
     let items = result.rss?.channel?.item || []
 
     // Handle both array and single item cases
     const itemsArray = Array.isArray(items) ? items : (items ? [items] : [])
-
-    console.log(`Found ${itemsArray.length} items in RSS feed`)
 
     // Parse each item - Letterboxd uses namespaced elements
     const movies = itemsArray

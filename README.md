@@ -57,17 +57,25 @@ Vantage is a high-end, brutalist movie analytics manifest that transforms your L
 Letterboxd Site/
 ├── src/
 │   ├── components/
-│   │   ├── LandingPage.jsx     # Archival Landing Protocol
-│   │   ├── Dashboard.jsx       # The Analytics Manifest
-│   │   ├── DataScanner.jsx     # Live Metadata Visualizer
-│   │   ├── FilmSlate.jsx       # Intro Animation
-│   │   └── dashboard/          # Specialized Analysis Modules
+│   │   ├── ...                 # React UI Components
+│   ├── App.jsx                 # Core Routing
 ├── server/
-│   ├── index.js                # Core API Junction
+│   ├── index.js                # Core Express API Junction
 │   ├── rssParser.js            # RSS XML Decoding
 │   └── tmdbEnricher.js         # TMDB Metadata Sequencing
+├── api/
+│   └── index.js                # Vercel Serverless Function Wrapper
+├── vercel.json                 # Vercel Deployment Configuration
 └── package.json
 ```
+
+## Vercel Deployment
+
+Vantage is pre-configured for zero-config Serverless deployment on Vercel.
+1. Push your code to GitHub.
+2. Import the project into Vercel.
+3. Add your `TMDB_API_KEY` to the Vercel Environment Variables.
+4. Deploy. The configurations in `vercel.json` and `api/index.js` will automatically route backend requests to the Serverless functions.
 
 ## License
 MIT
