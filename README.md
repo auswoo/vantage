@@ -4,8 +4,9 @@ Vantage is a high-end, brutalist movie analytics manifest that transforms your L
 
 ## Features
 
-- **Paper Mode Aesthetic**: A stark, archival interface inspired by clinical data registries and high-end editorial design.
-- **DataScanner Visualizer**: Active Letterboxd-green pixel sweeps that signal background processing and metadata synchronization.
+- **Brutalist Paper Aesthetic**: A stark, archival interface inspired by clinical data registries, featuring high-contrast "ink on paper" design.
+- **Cinematic Masked Header**: A massive, clamped typography header featuring responsive film-grain video masking and a realistic CRT scanner glitch effect.
+- **GhostLog Data Stream**: A right-aligned, interactive system event log that simulates background processing streams globally across the interface.
 - **Brutal Metrics**:
   - **Volume Audit**: Track cumulative minutes of cinematic consumption.
   - **Narrative Dominance**: Identify the genre clusters that rule your archive.
@@ -55,10 +56,14 @@ Vantage is a high-end, brutalist movie analytics manifest that transforms your L
 
 ```
 Letterboxd Site/
+├── public/                     # Static brutalist `.png` and `.svg` favicons
 ├── src/
 │   ├── components/
-│   │   ├── ...                 # React UI Components
-│   ├── App.jsx                 # Core Routing
+│   │   ├── LandingPage.jsx     # Clinical entry protocol
+│   │   ├── GhostLog.jsx        # Right-margin system event stream
+│   │   ├── ...                 # Recharts and UI Modules
+│   ├── App.jsx                 # Core Routing and Interface Shell
+│   └── index.css               # Global Tailwind directives and CSS Keyframes
 ├── server/
 │   ├── index.js                # Core Express API Junction
 │   ├── rssParser.js            # RSS XML Decoding
