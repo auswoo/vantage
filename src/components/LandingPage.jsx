@@ -20,8 +20,8 @@ const LandingPage = ({ onSubmit, loading }) => {
         className="w-full flex justify-between items-baseline mb-32 border-b border-ink pb-4 relative overflow-hidden"
       >
         <DataScanner />
-        <span className="font-sans font-black uppercase tracking-[0.4em] text-[10px]">SCHEMA: VANTAGE_PROD</span>
-        <span className="font-sans font-bold uppercase tracking-widest text-[10px]">BUILD_ENV: PROD.VERCEL</span>
+        <span className="font-sans font-black uppercase tracking-[0.4em] text-[10px]">SCHEMA: AW</span>
+        <span className="font-sans font-bold uppercase tracking-widest text-[10px]">BUILD_ENV: PROD</span>
       </motion.div>
 
       <div className="max-w-6xl w-full">
