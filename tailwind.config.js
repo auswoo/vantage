@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        'paper': '#FFFFFF',
+        'paper': '#F2F2F2',
         'ink': '#000000',
         'lb-orange': '#FF8000',
         'lb-green': '#00E054',
