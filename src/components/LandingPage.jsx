@@ -20,33 +20,44 @@ const LandingPage = ({ onSubmit, loading }) => {
         className="w-full flex justify-between items-baseline mb-32 border-b border-ink pb-4 relative overflow-hidden"
       >
         <DataScanner />
-        <span className="font-sans font-black uppercase tracking-[0.4em] text-[10px]">CINEMATIC_INDEX</span>
-        <span className="font-sans font-bold uppercase tracking-widest text-[10px]">BATCH_SIZE: 50</span>
+        <span className="font-sans font-black uppercase tracking-[0.4em] text-[10px]">SCHEMA: VANTAGE_PROD</span>
+        <span className="font-sans font-bold uppercase tracking-widest text-[10px]">BUILD_ENV: PROD.VERCEL</span>
       </motion.div>
 
       <div className="max-w-6xl w-full">
-        {/* Massive Hero */}
+        {/* FILMSET Masked Cinematic Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
+          exit={{ y: -50, opacity: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-32 text-center lg:text-left"
+          className="mb-24 flex flex-col items-center justify-center w-full"
         >
-          <h1 className="text-[12vw] lg:text-[10rem] font-serif italic mb-8 -ml-2">
-            Your Movies.
-          </h1>
-          <h1 className="text-[12vw] lg:text-[10rem] font-serif font-bold text-lb-green leading-[0.8]">
-            The Data.
+          <h1
+            className="w-full text-center font-sans font-black uppercase leading-none"
+            style={{
+              fontSize: '18vw',
+              letterSpacing: '-0.05em',
+              background: `url('https://media.giphy.com/media/l41K3o5TzvmhZwd4A/giphy.gif') center/cover, #111`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              color: '#111',
+              filter: url.length > 0 ? 'brightness(1.5) contrast(1.2)' : 'brightness(1) contrast(1)',
+              transition: 'filter 0.5s ease',
+            }}
+          >
+            VANTAGE
           </h1>
 
-          <div className="relative overflow-hidden w-full mt-12 mb-12">
-            <div className="editorial-divider !mt-0 !mb-0" />
-            <DataScanner />
+          {/* Data Sub-Header (Clinical Status Line) */}
+          <div className="font-mono text-xs opacity-60 mt-4 tracking-widest text-center mb-16">
+            INDEX_REF: {url || '[USER_INPUT]'} // BATCH_SZ: 50 // ENRICHMENT: TMDB_v2.1
           </div>
 
           <div className="flex flex-col lg:flex-row gap-12 lg:items-start">
             <p className="flex-1 font-sans text-xl lg:text-2xl font-bold tracking-tight leading-snug">
-              A comprehensive analytical manifest documenting your cinematic history. Synthesized via Letterboxd metadata. Decoded for the modern cinephile.
+              VANTAGE [vän-tij] — A singular coordinate for cinematic analysis. Synthesized via Letterboxd metadata. Decoded for the modern cinephile.
             </p>
             <div className="flex-1">
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
