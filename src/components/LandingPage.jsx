@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import DataScanner from './DataScanner'
+import GhostLog from './GhostLog'
 
 const LandingPage = ({ onSubmit, loading }) => {
   const [url, setUrl] = useState('')
@@ -24,7 +25,9 @@ const LandingPage = ({ onSubmit, loading }) => {
         <span className="font-sans font-bold uppercase tracking-widest text-[10px]">BUILD_ENV: PROD</span>
       </motion.div>
 
-      <div className="max-w-6xl w-full">
+      <GhostLog />
+
+      <div className="w-full">
         {/* FILMSET Masked Cinematic Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
